@@ -1,0 +1,1027 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+</head>
+<body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17"></script>
+<script src="https://www.careerjunction.co.za/vue-components/1.2.0/modal-consent-component.min.js"></script>
+<input type="hidden" id="txtObjJson"
+       value="{&quot;yourPrivacyText&quot;:&quot;Your privacy&quot;,&quot;bannerText&quot;:&quot;This site uses cookies and similar technologies to collect and process personal data that recollects your activities and preferences. Some of the personal data, stored on your device, is processed by trusted service providers. We do this to personalise our site, services and the adverts you are shown on and off our website. Click 'I accept' to consent to the use of these technologies or 'Settings' if you wish to manage your settings. You can always change the setting by going to the <a href=\&quot;/about/cookie-policy\&quot;>Cookie Policy</a> page. Necessary cookies enable core functionality such as security, network management, and accessibility. You may disable these by changing your browser settings, but this may affect how the website functions.&quot;,&quot;settingsText&quot;:&quot;Settings&quot;,&quot;acceptText&quot;:&quot;I accept&quot;,&quot;acceptAllText&quot;:&quot;Accept All&quot;,&quot;valuePrivacyText&quot;:&quot;We value your privacy&quot;,&quot;modalTitle&quot;:&quot;Here you can control if you want to receive advertising via third-parties.&quot;,&quot;alwaysActiveText&quot;:&quot;Always Active&quot;,&quot;informationStorageTitle&quot;:&quot;Information storage, access and measurement&quot;,&quot;informationStorageText&quot;:&quot;The storage of information, or access to information that is already stored, on your device such as advertising identifiers, device identifiers, cookies, and similar technologies. The collection of information about your use of the content, and combination with previously collected information, used to measure, understand, and report on your usage of the service.&quot;,&quot;informationAdvertsTitle&quot;:&quot;Adverts for other goods and services on this website as well as job adverts on other websites&quot;,&quot;informationAdvertsText&quot;:&quot;This allows us to display career and job related adverts to you while you are on other websites. For example, this allows us to show you the latest suitable jobs whilst you are catching up on the news. It also allows other companies to advertise to you whilst you are on this website.&quot;,&quot;moreInformationPolicyText&quot;:&quot;You can find out more information on the data we collect and what we do with it within our <a href=\&quot;/about/cookie-policy\&quot;>Cookie Policy</a>.&quot;,&quot;confirmText&quot;:&quot;Confirm&quot;}">
+<input type="hidden" id="domainTxt" value="https://www.careerjunction.co.za/"> <span id="app-modal"> <app
+        :show-banner="true" :id-modal="idModal" ref="mainRef" :text-object="objectText" :cookie-domain="domain"
+        :secure-cookie="true"></app> </span>
+<script>
+
+    var strObj = JSON.parse($('#txtObjJson').val());
+    var strDomain = getDomain();
+
+    var app = new Vue({
+        el: '#app-modal',
+        data: function () {
+            return {
+                idModal: 'mainModal',
+                objectText: strObj,
+                domain: strDomain
+            }
+        }
+    });
+
+    function getDomain() {
+        var domain = $("#domainTxt").val();
+        if (domain == null || domain === "" || domain === ".localhost" || domain === "localhost" || domain.includes("localhost"))
+            return window.location.hostname;
+
+        return getSiteDomainName(domain);
+    }
+
+    function getSiteDomainName(url) {
+        var match = url.match(/^(?:https?:\/\/)?(?:[^.]+\.)?([^:\/\n\?\=]+)/im);
+        if (match != null && match.length > 1 && typeof match[1] === 'string' && match[1].length > 0) {
+            return "." + match[1];
+        }
+        return null;
+    }
+</script>
+<header class="cj-main-menu">
+    <nav id="cjun-main-nav" class="sticky cjun-main-nav">
+        <div class="wrap">
+            <div class="content">
+                <a href="/" class="cjun-logo"><img src="/images/cjun/career-junction-logo.svg" alt="CareerJunction"></a>
+                <div class="items">
+                    <ul>
+                        <li id="bookmarkedJobsCount" class="adjust-logged-out" style="visibility:hidden"><a
+                                href="/myprofile/saved-jobs" class="cta-menu"><i
+                                class="fas fa-star favorite-icon-menu"></i><span>0</span> saved jobs</a></li>
+                        <li class="adjust-logged-out c-links-wrap"><a class="cta-menu c-links" href="/account/signin">Sign
+                            In</a> / <a class="cta-menu c-links singUpButton">Sign Up</a></li>
+                        <li class="burguer"><span class="cjun-menu-trigger" onclick="triggerMainMenu()"> <span
+                                class="fas fa-bars"></span> </span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="cjun-menu-host">
+        <div id="cjun-menu-wrapper">
+            <div id="cjun-menu-content" class="cjun-menu-overlay">
+                <i class="fas fa-caret-up"></i>
+                <div class="cjun-menu-overlay-content">
+                    <div class="jobseeker-items-menu">
+                        <a class="item-menu" href="/account/signin?ReturnUrl=myprofile/saved-jobs">My Jobs</a> <a
+                            class="item-menu" href="/account/signin?ReturnUrl=myprofile/jobalerts">My Alerts</a> <a
+                            class="item-menu" href="/account/signin?ReturnUrl=myprofile/EditProfile">My Profile &amp;
+                        CV</a> <a class="item-menu sep" href="/account/signin">Sign In</a> <a
+                            class="item-menu singUpButton">Sign Up</a>
+                    </div>
+                    <a class="item-menu close-btn" href="javascript:void(0)" onclick="closeNav()"> <span>×</span> </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header><!--Main Navigation-->
+<div id="page">
+    <div id="searched-for">
+        <div class="cjun-search-global">
+            <link rel="stylesheet" href="/css/autosuggest_simple_theme.css" type="text/css" media="screen"
+                  charset="utf-8">
+            <script type="text/javascript">
+                var AutoSuggestAPI = '/WebService/AjaxWS.asmx/GetJobTitlesList';
+            </script>
+            <script type="text/javascript" src="/js/typeahead.js"></script>
+            <script type="text/javascript" src="/js/bsn.AutoSuggest_c_2.0.js"></script>
+            <script type="text/javascript" src="/js/autosuggest.js?v=1.1"></script>
+            <div id="search-global-widget" class="search-global-container">
+                <form method="get" action="/jobs/results">
+                    <div class="title-container">
+                        <h2>Search thousands of fresh jobs</h2>
+                    </div>
+                    <div class="options">
+                        <div id="cancel-search-global" class="cancel">
+                            <span>×</span>
+                        </div>
+                        <div id="search-job-group-global" class="keyword clearable">
+                            <input class="search-job-title  search-box" name="keywords" autocorrect="off" id="Keywords"
+                                   maxlength="80" placeholder="Job title, skill or company" populated=""
+                                   spellcheck="False" style="outline: none; border: none;" type="search" value=""> <span
+                                id="loading"></span> <input id="autosuggestEndpoint" name="autosuggestEndpoint"
+                                                            type="hidden" value="/autosuggest"> <i
+                                class="fas fa-times clearable__clear" style="display:none"></i>
+                        </div>
+                        <div class="dropdown">
+                            <span class="drpMask"></span> <select id="location" name="location">
+                            <option value="0">Location</option>
+                            <option value="100000" class="parent-location">Work From Home</option>
+                            <option value="2747" class="parent-location">Gauteng</option>
+                            <option value="28880" class="">Johannesburg South</option>
+                            <option value="5108" class="">Johannesburg Region</option>
+                            <option value="10860" class="">Pretoria Region</option>
+                            <option value="27990" class="">East Rand</option>
+                            <option value="28022" class="">West Rand</option>
+                            <option value="28019" class="">Vaal</option>
+                            <option value="16149" class="parent-location">Western Cape</option>
+                            <option value="16464" class="">Cape Town Region</option>
+                            <option value="17903" class="">Winelands</option>
+                            <option value="17904" class="">West Coast</option>
+                            <option value="17912" class="">Garden Route</option>
+                            <option value="17902" class="">Overberg</option>
+                            <option value="17906" class="">Karoo</option>
+                            <option value="13131" class="parent-location">KwaZulu-Natal</option>
+                            <option value="13431" class="">Durban Region</option>
+                            <option value="17899" class="">North Coast</option>
+                            <option value="17910" class="">Midlands &amp; Interior</option>
+                            <option value="28020" class="">South Coast</option>
+                            <option value="2" class="parent-location">Eastern Cape</option>
+                            <option value="1782" class="parent-location">Free State</option>
+                            <option value="14867" class="parent-location">Mpumalanga</option>
+                            <option value="14594" class="parent-location">Limpopo</option>
+                            <option value="15372" class="parent-location">North West</option>
+                            <option value="15837" class="parent-location">Northern Cape</option>
+                            <option value="1000001" class="parent-location">International</option>
+                        </select> <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="dropdown category">
+                            <span class="drpMaskCategory"></span> <select id="category" name="category">
+                            <option value="">In All Categories</option>
+                            <option value="3">Admin, Office &amp; Support</option>
+                            <option value="4">Agriculture, Fishing &amp; Forestry</option>
+                            <option value="10">Architecture &amp; Engineering</option>
+                            <option value="7">Building &amp; Construction</option>
+                            <option value="1">Business &amp; Management</option>
+                            <option value="23">Cleaning, Maintenance &amp; Repair</option>
+                            <option value="21">Community &amp; Social Welfare</option>
+                            <option value="5">Design, Media &amp; Arts</option>
+                            <option value="9">Education, Training &amp; Library</option>
+                            <option value="2">Finance</option>
+                            <option value="16">Information Technology</option>
+                            <option value="17">Legal</option>
+                            <option value="18">Manufacturing &amp; Assembly</option>
+                            <option value="12">Marketing</option>
+                            <option value="19">Medical &amp; Health</option>
+                            <option value="8">Mining</option>
+                            <option value="22">Personal Appearance</option>
+                            <option value="13">Restaurant &amp; Hospitality</option>
+                            <option value="11">Sales</option>
+                            <option value="25">Science &amp; Technology</option>
+                            <option value="20">Security &amp; Emergency Services</option>
+                            <option value="6">Sport &amp; Fitness</option>
+                            <option value="15">Telecommunication</option>
+                            <option value="26">Transportation</option>
+                            <option value="24">Travel &amp; Tourism</option>
+                            <option value="14">Warehousing &amp; Logistics</option>
+                            <option value="99">Other</option>
+                        </select> <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="button-container">
+                        <button type="submit" id="btnSubmit" name="btnSubmit" value=" " class="btnLoaderTrigger"><i
+                                class="fas fa-search"></i><span>Search</span></button>
+                    </div>
+                </form>
+                <div id="tap-search-global" class="global-tap"></div>
+            </div>
+        </div>
+    </div>
+    <script src="/Common/js/job-description.js?V=5" type="text/javascript"></script>
+    <script type="text/javascript" src="/Common/js/PLNativeBridge_v2.js"></script>
+    <script type="text/javascript" src="/Common/js/cjun/ShareThis.js"></script>
+    <script>
+        window.isAgency = 'True';
+        $(document).ready(function () {
+            var isLoggedon = 'False';
+            if(isLoggedon == 'True') {
+                getLastView(0, 2605328, $("#lastViewed"));
+                setLastView('0', '2605328', '12 Apr 2025');
+            }
+        });
+    </script>
+    <script type="text/javascript">
+        if(!saon.Api.AjaxWS) saon.Api.AjaxWS = {};
+        saon.Api.AjaxWS.AddRemoveJob =  '/WebService/AjaxWS.asmx/AddRemoveJob';
+        saon.Api.GetSimilarJobs = "/get-similar-jobdescription?jobseekerGuid=3325a95f-ea77-4a3f-ac18-3c4f05b24248\u0026jobId=2605328\u0026page=JobDescription";
+    </script>
+    <div class="container home-content-container">
+        <div class="column-wrap">
+            <div class="full-page ">
+                <div class="job-options">
+                    <a class="return-to-results"> <i class="fas fa-arrow-left"></i> <span>Return to results</span> </a>
+                </div>
+                <div class="expired-job-message alert alert-danger">
+                    This job is expired
+                </div>
+                <div class=" full-page">
+                    <div class="module">
+                        <section class="cjun-job-listing-page" style="padding: 0">
+                            <div class="cjun-job-listing-container">
+                                <div class="share-and-favorite">
+                                    <div class="share trigger" rel="1">
+                                        <i class="fas fa-share-alt"></i>
+                                        <p>Share This Job</p>
+                                        <ul class="job-sharing-dropdown">
+                                            <div class="job-sharing" style="display: none;">
+                                                <ul>
+                                                    <li><!-- AddThis Button BEGIN -->
+                                                        <div class="addthis_toolbox addthis_default_style addthis_32x32_style">
+                                                            <a name="whatsapp" href="#"
+                                                               onclick="OpenSocialMediaUrl(this);return false;"
+                                                               class="addthis_button_whatsapp"><i
+                                                                    class="fab fa-whatsapp"></i><span>Whatsapp</span></a>
+                                                            <a name="facebook" href="#"
+                                                               onclick="OpenSocialMediaUrl(this);return false;"
+                                                               class="addthis_button_facebook"><i
+                                                                    class="fab fa-facebook-f"></i><span>Facebook</span></a>
+                                                            <a name="twitter" href="#"
+                                                               onclick="OpenSocialMediaUrl(this);return false;"
+                                                               class="addthis_button_twitter"><i
+                                                                    class="fab fa-twitter"></i><span>Twitter</span></a>
+                                                        </div>
+                                                        <script type="text/javascript">
+                                                            var addthis_config = { "data_track_addressbar": false }; var addthis_share = { email_template: "CareerJunction_Addthis" };
+                                                        </script><!-- AddThis Button END -->
+                                                        <script>
+                                                            function OpenSocialMediaUrl(button) {
+
+                                                                const w = 480, h = 350;
+
+                                                                // Fixes dual-screen position                             Most browsers      Firefox
+                                                                const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screenX;
+                                                                const dualScreenTop = window.screenTop !== undefined ? window.screenTop : window.screenY;
+
+                                                                const width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+                                                                const height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+                                                                const systemZoom = width / window.screen.availWidth;
+                                                                const left = (width - w) / 2 / systemZoom + dualScreenLeft;
+                                                                const top = (height - h) / 2 / systemZoom + dualScreenTop;
+
+
+                                                                const url = window.location.href;
+                                                                const platform = button.name;
+                                                                let shareUrl;
+                                                                switch (platform) {
+                                                                    case 'facebook':
+                                                                        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+                                                                        break;
+                                                                    case 'twitter':
+                                                                        shareUrl = `https://twitter.com/share?url=${encodeURIComponent(url)}`;
+                                                                        break;
+                                                                    case 'linkedin':
+                                                                        shareUrl = `https://www.linkedin.com/shareArticle?url=${encodeURIComponent(url)}`;
+                                                                        break;
+                                                                    case 'google':
+                                                                        shareUrl = `https://plus.google.com/share?url=${encodeURIComponent(url)}`;
+                                                                        break;
+                                                                    case 'whatsapp':
+                                                                        shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(url)}`;
+                                                                        break;
+                                                                }
+
+                                                                window.open(shareUrl, platform,
+                                                                    `
+                                                                          scrollbars=yes,
+                                                                          width=${w / systemZoom},
+                                                                          height=${h / systemZoom},
+                                                                          top=${top},
+                                                                          left=${left}
+                                                                        `
+                                                                );
+                                                            }
+                                                        </script>
+                                                        <span class="rep-job-cjun"> <a
+                                                                href="/report-this-job?id=2605328" rel="nofollow"><i
+                                                                class="fas fa-exclamation-circle"></i> <span>Report This Job</span></a> </span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="cjun-main-profile job-details ">
+                                    <div class="main-profile">
+                                        <div class="main-profile-info">
+                                            <div class="profile-info">
+                                                <div class="job-description">
+                                                    <div class="logo-mob">
+                                                        <img src="https://careerjunction-web-prd.s3.eu-west-1.amazonaws.com/assets/employer-logos/23252-240x120.png?X-Amz-Expires=86400&amp;X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIA3UBW7IFPPL4T7PMH/20250412/eu-west-1/s3/aws4_request&amp;X-Amz-Date=20250412T111019Z&amp;X-Amz-SignedHeaders=host&amp;X-Amz-Signature=02aea7799a17829aeb12a9b0e6b0b912852d97e0c2f551597255ebc2079f657b"
+                                                             alt="GoldenRule" onerror="smallLogoNotFound(this)">
+                                                    </div>
+                                                    <div class="name-wrapper">
+                                                        <h1>Senior Python Backend Engineer (JHB/CPT)</h1>
+                                                        <h2>GoldenRule</h2><span id="lastViewed" class="viewed-label"
+                                                                                 style="visibility: hidden"></span>
+                                                    </div>
+                                                    <ul class="job-overview ov-item">
+                                                        <li class="salary">R Undisclosed</li>
+                                                        <li class="position">Permanent Senior position</li>
+                                                        <li class="location">Johannesburg</li>
+                                                        <li class="updated-time">Posted 12 Apr 2025 by GoldenRule</li>
+                                                        <li class="expires">Expires in 25 days</li>
+                                                        <li class="cjun-job-ref">Job 2605328 - Ref GDR03615</li>
+                                                    </ul>
+                                                    <div class="cta-desc">
+                                                        <div class="apply-btn-wrapper">
+                                                            <span id="overlayTrigger"></span>
+                                                            <div class="favorite" jobid="2605328">
+                                                                <a class="btn-save-job" rel="nofollow"><i
+                                                                        class="far fa-star"></i> <span class="save-dk">Save</span>
+                                                                </a>
+                                                            </div>
+                                                            <a href="/application/apply-link/2605328"
+                                                               class="btn-apply data_btn_track" rel="nofollow">Apply
+                                                                Now</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="job-desc-on-expired job-details-description">
+                                            <div class="job-details">
+                                                <h2>About the position</h2>
+                                                <p><span></span></p>
+                                                <p>The role of the Serverless Backend Engineer is responsible for
+                                                    understanding requirements and building solutions under a serverless
+                                                    architecture model. The Serverless Backend Engineer reports directly
+                                                    to the Product Owner and the Chapter Leader.<br><br><br>
+                                                    &nbsp;<br><br><br></p>
+                                                <ul>
+                                                    <br>
+                                                    <li>Build solutions from requirements received from product owner.
+                                                    </li>
+                                                    <br>
+                                                    <li>Be able to work in agile environment.</li>
+                                                    <br>
+                                                    <li>Able to build POC solutions and demonstrate/present.</li>
+                                                    <br>
+                                                    <li>Maintain a stable server with zero downtime.</li>
+                                                    <br>
+                                                    <li>Develop tools and applications by producing clean code.</li>
+                                                    <br>
+                                                    <li>Automate tasks through appropriate tools and scripting.</li>
+                                                    <br>
+                                                    <li>Review and debug code.</li>
+                                                    <br>
+                                                    <li>Develop software solutions by studying information needs;
+                                                        conferring with users; studying systems flow, data usage and
+                                                        work processes; investigating problem areas; following the
+                                                        software development lifecycle.
+                                                    </li>
+                                                    <br>
+                                                    <li>Determine operational feasibility by evaluating analysis,
+                                                        problem definition, requirements, solution development and
+                                                        proposed solutions.
+                                                    </li>
+                                                    <br>
+                                                    <li>Mentor junior engineers.</li>
+                                                    <br>
+                                                    <li>Collaborate with team to brainstorm and create new products.
+                                                    </li>
+                                                    <br>
+                                                    <li>Be able to report on their work using agile tools such as
+                                                        JIRA.
+                                                    </li>
+                                                    <br>
+                                                    <li>Be able to elaborate and document his work in confluence.</li>
+                                                    <br>
+                                                    <li>Be communicative and proactive.</li>
+                                                    <br>
+                                                </ul>
+                                                <ul>
+                                                    <br>
+                                                    <li>AWS components such as Lambda, SQS, Dynamo DB</li>
+                                                    <br>
+                                                    <li>AWS API Gateway</li>
+                                                    <br>
+                                                    <li>Terraform</li>
+                                                    <br>
+                                                    <li>Python 3.9</li>
+                                                    <br>
+                                                    <li>Pytest</li>
+                                                    <br>
+                                                    <li>Knowledge of Rest API integrations</li>
+                                                    <br>
+                                                    <li>OpenAPI, swagger</li>
+                                                    <br>
+                                                    <li>GitHub actions for CI CD</li>
+                                                    <br>
+                                                    <li>Docker and Docker compose</li>
+                                                    <br>
+                                                    <li>Makefile</li>
+                                                    <br>
+                                                    <li>Apache velocity language</li>
+                                                    <br>
+                                                    <li>Proven experience as a Back-end developer</li>
+                                                    <br>
+                                                </ul>
+                                                <br>
+                                                &nbsp;
+                                                <br>
+                                                <br>
+                                                <br>
+                                                Competencies
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <ul>
+                                                    <br>
+                                                    <li>Strategic</li>
+                                                    <br>
+                                                    <li>Leading with Influence</li>
+                                                    <br>
+                                                    <li>Collaboration (Relating)</li>
+                                                    <br>
+                                                    <li>Customer First</li>
+                                                    <br>
+                                                    <li>Execution</li>
+                                                    <br>
+                                                    <li>Innovation (Perspective)</li>
+                                                    <br>
+                                                    <li>Personal Mastery (Learning)</li>
+                                                    <br>
+                                                </ul>
+                                                <p></p><img
+                                                    src="https://recruiter.careerjunction.co.za//_service/p/RecruiterSiteTypePlugin_1_0/recruiter/logpixeltrackingjobview?id=f07ee96a-10a3-11f0-baf3-02ecce2d5745"
+                                                    width="0px" height="0px" style="display:none">
+                                                <p><span><strong>Desired Skills: </strong></span></p>
+                                                <ul>
+                                                    <li>Systems Analysis</li>
+                                                    <li>Complex Problem Solving</li>
+                                                    <li>Programming/configuration</li>
+                                                    <li>Critical Thinking</li>
+                                                    <li>Time Management</li>
+                                                </ul>
+                                                <p></p>
+                                            </div>
+                                        </div>
+                                        <div class="expires expires-button cta-desc-above">
+                                            <a href="/application/apply-link/2605328" class="btn-apply data_btn_track"
+                                               rel="nofollow">Apply Now</a>
+                                        </div>
+                                    </div>
+                                    <div class="aside-profile">
+                                        <div class="profile-container">
+                                            <div class="profile-image">
+                                                <div class="cjun-logo-wrap">
+                                                    <a href="/companies/23252/goldenrule"> <img
+                                                            class="cjun-logo-company"
+                                                            src="https://careerjunction-web-prd.s3.eu-west-1.amazonaws.com/assets/employer-logos/23252-240x120.png?X-Amz-Expires=86400&amp;X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIA3UBW7IFPPL4T7PMH/20250412/eu-west-1/s3/aws4_request&amp;X-Amz-Date=20250412T111019Z&amp;X-Amz-SignedHeaders=host&amp;X-Amz-Signature=02aea7799a17829aeb12a9b0e6b0b912852d97e0c2f551597255ebc2079f657b"
+                                                            alt="" onerror="smallLogoNotFound(this)"> </a>
+                                                </div>
+                                                <h2>GoldenRule</h2>
+                                                <div class="company-links">
+                                                    <a href="/companies/23252/goldenrule">
+                                                        <p>View agency profile</p><i class="fas fa-arrow-right"></i>
+                                                    </a> <a href="/companies/23252/goldenrule#jobs">
+                                                    <p>See all GoldenRule jobs</p><i class="fas fa-arrow-right"></i>
+                                                </a>
+                                                </div>
+                                                <div class="about-the-agency">
+                                                    <h2>About the agency</h2>
+                                                    <p style="display: block; overflow: visible; height: auto;"
+                                                       id="about-the-agency-text">GoldenRule is positioned as a
+                                                        Strategic Resourcing Partner. We are IT Services company with a
+                                                        Total solution offering around staffing issues. We currently
+                                                        offer the following services: * Contracting of GoldenRule
+                                                        fulltime staff to our clients for in-house or external projects.
+                                                        * Permanent placements * Temporary placements to permanent
+                                                        placements * Allowing our fulltime employees to accept job
+                                                        offers from our clients to add further value. * All candidates
+                                                        are technically evaluated for each position. (GoldenRule makes
+                                                        use of an In-house evaluation methodology and Teckcheck) *
+                                                        Hosting learnerships. We hold the risk in developing junior
+                                                        resources. Ideal for AA candidates. * We are able to provided
+                                                        local, AA and international skills. * With international
+                                                        resources meticulous attention is given to Work Permit issues
+                                                        and the relocation of our employees. GoldenRule has an attentive
+                                                        program for relocation and integration of our employees into
+                                                        South Africa. This includes accommodation in furnished
+                                                        guesthouses, transport to and from work, assistance with various
+                                                        forms of finance and obtaining banking products etc.</p>
+                                                    <div>
+                                                        <a id="read-more" href="#">read more</a> <a id="read-less"
+                                                                                                    href="#">read
+                                                        less</a>
+                                                    </div>
+                                                </div>
+                                                <div id="jobalertfeedbackSimilar" class="similar-jobs-email">
+                                                    <p class="receive-email">Receive a daily digest of all new jobs
+                                                        matching this job. Your information is safe with us and you can
+                                                        cancel any time.</p><a id="create-job-alert-btn"
+                                                                               class="apply-now email-me-jobs-btn">
+                                                    EMAIL ME JOBS LIKE THIS </a>
+                                                </div>
+                                                <div class="clear"></div>
+                                                <div class="add-job-alert-container job-description-job-alert">
+                                                    <script type="text/javascript"
+                                                            src="/Common/js/smartRegistration.js?v=1"></script>
+                                                    <script type="text/javascript">
+                                                        if (!saon.Api.AjaxWS) saon.Api.AjaxWS = {};
+                                                        saon.Api.AjaxWS.ValidateEmailDomain = '/validate-cv-domain';
+                                                        function createJobAlertSimilar() {
+
+                                                            var email = "";
+                                                            //TO DO: Unify JS code of new job alerts partial views
+
+                                                                    email = $("#Email-similar").val();
+
+
+                                                            if (email != "") {
+                                                                if (validateEmailDomain(email)) {
+                                                                    $("#createjobalertSimilar").css("visibility", "hidden");
+                                                                    $("#addjobalertdivSimilar").append("<img src='/img/icons/AjaxLoader.gif' />");
+                                                                    $.ajax({
+                                                                        type : 'POST',
+                                                                        data: { jobAlertName: "Senior Python Backend Engineer (JHB/CPT)", email: email, requestURL: "https://www.careerjunction.co.za/JobDesc.aspx?ID=2605328",isJobDescription:'True'},
+                                                                        dataType: 'json',
+                                                                        url: "/CreateJobAlert",
+                                                                        success: function (data) {
+                                                                            if (data.Success) {
+                                                                                var message = "";
+
+                                                                            if (data.NewJobSeeker) {
+                                                                                message += "<p class='confirm'><svg version='1.1' id='Layer_1' xmlns='https://www.w3.org/2000/svg' xmlns:xlink='https://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 21 21' style='width: 19px;vertical-align: bottom;enable-background:new 0 0 21 21;' xml:space='preserve'><style type='text/css'>.st0{fill:none;}.st1{fill:#31C104;}</style><g><path class='st0' d='M10.5,20C5.3,20,1,15.7,1,10.5C1,5.3,5.3,1,10.5,1c5.2,0,9.5,4.2,9.5,9.5C20,15.7,15.7,20,10.5,20z'></path><path class='st1' d='M10.5,2c4.7,0,8.5,3.8,8.5,8.5S15.2,19,10.5,19S2,15.2,2,10.5S5.8,2,10.5,2 M10.5,0C4.7,0,0,4.7,0,10.5S4.7,21,10.5,21S21,16.3,21,10.5S16.3,0,10.5,0L10.5,0z'></path></g><g><path class='st0' d='M8.7,14.8c0,0-0.1,0-0.2,0l-3-3c-0.1-0.1-0.1-0.1-0.1-0.2s0-0.1,0.1-0.2c0.1-0.1,0.1-0.1,0.2-0.1c0,0,0.1,0,0.2,0.1l2.8,2.8l6.5-6.5c0.1-0.1,0.1-0.1,0.2-0.1s0.1,0,0.2,0.1c0.1,0.1,0.1,0.1,0.1,0.2c0,0,0,0.1-0.1,0.2l-6.7,6.7C8.8,14.8,8.8,14.8,8.7,14.8z'></path><path class='st1' d='M15.4,6.6c-0.3,0-0.6,0.1-0.9,0.4l-5.8,5.8l-2.1-2.1c-0.2-0.2-0.6-0.4-0.9-0.4c-0.3,0-0.6,0.1-0.9,0.4c-0.5,0.5-0.5,1.3,0,1.8l2.9,2.9c0,0,0,0,0,0c0.2,0.2,0.6,0.4,0.9,0.4s0.6-0.1,0.9-0.4l6.7-6.7c0.5-0.5,0.5-1.3,0-1.8C16.1,6.7,15.7,6.6,15.4,6.6L15.4,6.6z'></path></g></svg>&nbsp; Your job alert email has been created.<br>"
+                                                                                message += "An email has been sent to " + email + ".<br>";
+                                                                                message += "Please click the link in the email to create your account and start receiving your Job Alerts emails.<br>";
+                                                                                message += "The link will expire in 24 hours.</p>"
+                                                                            } else {
+                                                                                message += "<p class='confirm'><svg version='1.1' id='Layer_1' xmlns='https://www.w3.org/2000/svg' xmlns:xlink='https://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 21 21' style='width: 19px;vertical-align: bottom;enable-background:new 0 0 21 21;' xml:space='preserve'><style type='text/css'>.st0{fill:none;}.st1{fill:#31C104;}</style><g><path class='st0' d='M10.5,20C5.3,20,1,15.7,1,10.5C1,5.3,5.3,1,10.5,1c5.2,0,9.5,4.2,9.5,9.5C20,15.7,15.7,20,10.5,20z'></path><path class='st1' d='M10.5,2c4.7,0,8.5,3.8,8.5,8.5S15.2,19,10.5,19S2,15.2,2,10.5S5.8,2,10.5,2 M10.5,0C4.7,0,0,4.7,0,10.5S4.7,21,10.5,21S21,16.3,21,10.5S16.3,0,10.5,0L10.5,0z'></path></g><g><path class='st0' d='M8.7,14.8c0,0-0.1,0-0.2,0l-3-3c-0.1-0.1-0.1-0.1-0.1-0.2s0-0.1,0.1-0.2c0.1-0.1,0.1-0.1,0.2-0.1c0,0,0.1,0,0.2,0.1l2.8,2.8l6.5-6.5c0.1-0.1,0.1-0.1,0.2-0.1s0.1,0,0.2,0.1c0.1,0.1,0.1,0.1,0.1,0.2c0,0,0,0.1-0.1,0.2l-6.7,6.7C8.8,14.8,8.8,14.8,8.7,14.8z'></path><path class='st1' d='M15.4,6.6c-0.3,0-0.6,0.1-0.9,0.4l-5.8,5.8l-2.1-2.1c-0.2-0.2-0.6-0.4-0.9-0.4c-0.3,0-0.6,0.1-0.9,0.4c-0.5,0.5-0.5,1.3,0,1.8l2.9,2.9c0,0,0,0,0,0c0.2,0.2,0.6,0.4,0.9,0.4s0.6-0.1,0.9-0.4l6.7-6.7c0.5-0.5,0.5-1.3,0-1.8C16.1,6.7,15.7,6.6,15.4,6.6L15.4,6.6z'></path></g></svg>&nbsp; Your job alert email has been created.</p>"
+                                                                            }
+
+                                                                                //DTM direct call for jaсreated condition
+                                                                                if (data.JaId > 0) {
+                                                                                    window.digitalData["jobalert__id"] = data.JaId;
+                                                                                    try {
+                                                                                        _satellite.track("jacreated");
+                                                                                    } catch (e) {}
+                                                                                }
+                                                                            $("#addjobalertdivSimilar").hide();
+                                                                            $("#jobalertfeedbackSimilar").html("");
+                                                                            $("#jobalertfeedbackSimilar").html(message);
+                                                                        } else {
+                                                                            $("#addjobalertdivSimilar").hide();
+                                                                            $("#jobalertfeedbackSimilar").html("");
+                                                                            $("#jobalertfeedbackSimilar").html("<p class='error'><?xml version='1.0' encoding='utf-8'?><!-- Generator: Adobe Illustrator 20.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  --><svg version='1.1' id='Layer_1' xmlns='https://www.w3.org/2000/svg' xmlns:xlink='https://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 21 21' style='enable-background:new 0 0 21 21;width: 19px;vertical-align: bottom;' xml:space='preserve'><style type='text/css'>.st0{fill:none;}.stRed{fill:#FF9595;}</style><g><path class='st0' d='M10.5,20C5.3,20,1,15.7,1,10.5C1,5.3,5.3,1,10.5,1c5.2,0,9.5,4.2,9.5,9.5C20,15.7,15.7,20,10.5,20z'/><path class='stRed' d='M10.5,2c4.7,0,8.5,3.8,8.5,8.5S15.2,19,10.5,19S2,15.2,2,10.5S5.8,2,10.5,2 M10.5,0C4.7,0,0,4.7,0,10.5S4.7,21,10.5,21S21,16.3,21,10.5S16.3,0,10.5,0L10.5,0z'/></g><g><path class='stRed' d='M12.4,14.9C11.1,16.4,9.7,17,9.1,17c-0.5,0-0.9-0.4-0.6-1.9l1.1-4.8c0.1-0.5,0.1-0.6,0-0.6c-0.2,0-0.8,0.4-1.1,0.7L8.2,9.9c1.3-1.3,2.7-2.1,3.4-2.1c0.6,0,0.7,0.7,0.4,2l-1.1,4.7c-0.1,0.6-0.1,0.7,0.1,0.7c0.2,0,0.6-0.3,1.1-0.7L12.4,14.9z M12.8,5.1c0,0.8-0.6,1.5-1.4,1.5c-0.6,0-1-0.5-1-1.1c0-0.8,0.5-1.5,1.4-1.5C12.4,4,12.8,4.5,12.8,5.1z'/></g></svg>&nbsp; You have reached your limit of 5 job alert emails.<br>To save a new job alert email you must delete at least 1 previously <a href='/myprofile/jobalerts'>saved job alert</a>.</p>");
+                                                                        }
+                                                                    },
+                                                                });
+                                                            } else {
+                                                                $("#jobalerterror-msgEmail").css("display", "inline-block");
+                                                                $('.name-alert').click(function(){
+                                                                    $('#jobalerterror-msgEmail').hide();
+                                                                });
+                                                            }
+                                                        } else {
+                                                                $("#jobalerterror-msgSimilar").css("display", "inline-block");
+                                                        $('.name-alert').click(function(){
+                                                            $('#jobalerterror-msgSimilar').hide();
+                                                        });
+                                                        }
+                                                       }
+
+                                                    </script>
+                                                    <div id="addjobalertdivSimilar">
+                                                        <div class="email-address" data-hj-masked>
+                                                            <input class="name-alert" id="Email-similar" maxlength="255"
+                                                                   name="Email-similar" placeholder="EMAIL" type="email"
+                                                                   value="">
+                                                        </div>
+                                                        <div id="jobalerterror-msgSimilar" style="display: none;">
+                                                            <p>Please enter your email address</p>
+                                                        </div>
+                                                        <div id="jobalerterror-msgEmail" style="display: none;">
+                                                            <p>Please enter a valid email address</p>
+                                                        </div>
+                                                        <input id="createjobalertSimilar" type="button"
+                                                               value="EMAIL ME JOBS" onclick="createJobAlertSimilar();"
+                                                               class="create-alert data_btn_track">
+                                                    </div>
+                                                </div>
+                                                <div class="date-bottom">
+                                                    <div>
+                                                        <i class="fas fa-hourglass-half"></i>
+                                                        <p>Expires in 25 days</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="share-and-favorite bottom-share">
+                                    <div class="share trigger" rel="2">
+                                        <i class="fas fa-share-alt"></i>
+                                        <p>Share This Job</p>
+                                        <ul class="job-sharing-dropdown">
+                                            <div class="job-sharing" style="display: none;">
+                                                <ul>
+                                                    <li><!-- AddThis Button BEGIN -->
+                                                        <div class="addthis_toolbox addthis_default_style addthis_32x32_style">
+                                                            <a name="whatsapp" href="#"
+                                                               onclick="OpenSocialMediaUrl(this);return false;"
+                                                               class="addthis_button_whatsapp"><i
+                                                                    class="fab fa-whatsapp"></i><span>Whatsapp</span></a>
+                                                            <a name="facebook" href="#"
+                                                               onclick="OpenSocialMediaUrl(this);return false;"
+                                                               class="addthis_button_facebook"><i
+                                                                    class="fab fa-facebook-f"></i><span>Facebook</span></a>
+                                                            <a name="twitter" href="#"
+                                                               onclick="OpenSocialMediaUrl(this);return false;"
+                                                               class="addthis_button_twitter"><i
+                                                                    class="fab fa-twitter"></i><span>Twitter</span></a>
+                                                        </div>
+                                                        <script type="text/javascript">
+                                                            var addthis_config = { "data_track_addressbar": false }; var addthis_share = { email_template: "CareerJunction_Addthis" };
+                                                        </script><!-- AddThis Button END -->
+                                                        <script>
+                                                            function OpenSocialMediaUrl(button) {
+
+                                                                const w = 480, h = 350;
+
+                                                                // Fixes dual-screen position                             Most browsers      Firefox
+                                                                const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screenX;
+                                                                const dualScreenTop = window.screenTop !== undefined ? window.screenTop : window.screenY;
+
+                                                                const width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+                                                                const height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+                                                                const systemZoom = width / window.screen.availWidth;
+                                                                const left = (width - w) / 2 / systemZoom + dualScreenLeft;
+                                                                const top = (height - h) / 2 / systemZoom + dualScreenTop;
+
+
+                                                                const url = window.location.href;
+                                                                const platform = button.name;
+                                                                let shareUrl;
+                                                                switch (platform) {
+                                                                    case 'facebook':
+                                                                        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+                                                                        break;
+                                                                    case 'twitter':
+                                                                        shareUrl = `https://twitter.com/share?url=${encodeURIComponent(url)}`;
+                                                                        break;
+                                                                    case 'linkedin':
+                                                                        shareUrl = `https://www.linkedin.com/shareArticle?url=${encodeURIComponent(url)}`;
+                                                                        break;
+                                                                    case 'google':
+                                                                        shareUrl = `https://plus.google.com/share?url=${encodeURIComponent(url)}`;
+                                                                        break;
+                                                                    case 'whatsapp':
+                                                                        shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(url)}`;
+                                                                        break;
+                                                                }
+
+                                                                window.open(shareUrl, platform,
+                                                                    `
+                                                                          scrollbars=yes,
+                                                                          width=${w / systemZoom},
+                                                                          height=${h / systemZoom},
+                                                                          top=${top},
+                                                                          left=${left}
+                                                                        `
+                                                                );
+                                                            }
+                                                        </script>
+                                                        <span class="rep-job-cjun"> <a
+                                                                href="/report-this-job?id=2605328" rel="nofollow"><i
+                                                                class="fas fa-exclamation-circle"></i> <span>Report This Job</span></a> </span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="similar-jobs"></div>
+                            <div class="module turn_on cjun-ja-email ja-job-description">
+                                <div class="add-job-alert-container">
+                                    <div class="module-content">
+                                        <script type="text/javascript"
+                                                src="/Common/js/smartRegistration.js?v=1"></script>
+                                        <script type="text/javascript">
+                                            if (!saon.Api.AjaxWS) saon.Api.AjaxWS = {};
+                                            saon.Api.AjaxWS.ValidateEmailDomain = '/validate-cv-domain';
+
+
+                                            function createJobAlertInline() {
+                                                var email = "";
+                                                $('.name-alert').click(function () {
+                                                    $('#ja-alert-error').hide();
+                                                    $('#ja-alert-error-email').hide();
+                                                });
+                                                //TO DO: Unify JS code of new job alerts partial views
+
+                                                        email = $("#Email-inline").val();
+
+
+
+                                               if (email != "") {
+                                                    if (validateEmailDomain(email)) {
+                                                        $("#createjobalert-inline").css("visibility", "hidden");
+                                                        $("#jobalertfeedback-inline").append("<img src='../img/icons/AjaxLoader.gif' />");
+
+                                                        $.ajax({
+                                                            type : 'POST',
+                                                            data: { jobAlertName: "Senior Python Backend Engineer (JHB/CPT)", email: email, requestURL: "https://www.careerjunction.co.za/JobDesc.aspx?ID=2605328&Keywords=",isJobDescription:'True' },
+                                                            dataType: 'json',
+                                                            url: "/CreateJobAlert",
+                                                            success: function (data) {
+                                                                if (data.Success) {
+                                                                    var message = "";
+
+                                                                if (data.NewJobSeeker) {
+                                                                    message += "<p class='confirm'><svg version='1.1' id='Layer_1' xmlns='https://www.w3.org/2000/svg' xmlns:xlink='https://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 21 21' style='width: 19px;vertical-align: bottom;enable-background:new 0 0 21 21;' xml:space='preserve'><style type='text/css'>.st0{fill:none;}.st1{fill:#31C104;}</style><g><path class='st0' d='M10.5,20C5.3,20,1,15.7,1,10.5C1,5.3,5.3,1,10.5,1c5.2,0,9.5,4.2,9.5,9.5C20,15.7,15.7,20,10.5,20z'></path><path class='st1' d='M10.5,2c4.7,0,8.5,3.8,8.5,8.5S15.2,19,10.5,19S2,15.2,2,10.5S5.8,2,10.5,2 M10.5,0C4.7,0,0,4.7,0,10.5S4.7,21,10.5,21S21,16.3,21,10.5S16.3,0,10.5,0L10.5,0z'></path></g><g><path class='st0' d='M8.7,14.8c0,0-0.1,0-0.2,0l-3-3c-0.1-0.1-0.1-0.1-0.1-0.2s0-0.1,0.1-0.2c0.1-0.1,0.1-0.1,0.2-0.1c0,0,0.1,0,0.2,0.1l2.8,2.8l6.5-6.5c0.1-0.1,0.1-0.1,0.2-0.1s0.1,0,0.2,0.1c0.1,0.1,0.1,0.1,0.1,0.2c0,0,0,0.1-0.1,0.2l-6.7,6.7C8.8,14.8,8.8,14.8,8.7,14.8z'></path><path class='st1' d='M15.4,6.6c-0.3,0-0.6,0.1-0.9,0.4l-5.8,5.8l-2.1-2.1c-0.2-0.2-0.6-0.4-0.9-0.4c-0.3,0-0.6,0.1-0.9,0.4c-0.5,0.5-0.5,1.3,0,1.8l2.9,2.9c0,0,0,0,0,0c0.2,0.2,0.6,0.4,0.9,0.4s0.6-0.1,0.9-0.4l6.7-6.7c0.5-0.5,0.5-1.3,0-1.8C16.1,6.7,15.7,6.6,15.4,6.6L15.4,6.6z'></path></g></svg>&nbsp; Your job alert email has been created.<br>"
+                                                                    message += "An email has been sent to " + email + ".<br>";
+                                                                    message += "Please click the link in the email to create your account and start receiving your Job Alerts emails.<br>";
+                                                                    message += "The link will expire in 24 hours.</p>"
+                                                                } else {
+                                                                    message += "<p class='confirm'><svg version='1.1' id='Layer_1' xmlns='https://www.w3.org/2000/svg' xmlns:xlink='https://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 21 21' style='width: 19px;vertical-align: bottom;enable-background:new 0 0 21 21;' xml:space='preserve'><style type='text/css'>.st0{fill:none;}.st1{fill:#31C104;}</style><g><path class='st0' d='M10.5,20C5.3,20,1,15.7,1,10.5C1,5.3,5.3,1,10.5,1c5.2,0,9.5,4.2,9.5,9.5C20,15.7,15.7,20,10.5,20z'></path><path class='st1' d='M10.5,2c4.7,0,8.5,3.8,8.5,8.5S15.2,19,10.5,19S2,15.2,2,10.5S5.8,2,10.5,2 M10.5,0C4.7,0,0,4.7,0,10.5S4.7,21,10.5,21S21,16.3,21,10.5S16.3,0,10.5,0L10.5,0z'></path></g><g><path class='st0' d='M8.7,14.8c0,0-0.1,0-0.2,0l-3-3c-0.1-0.1-0.1-0.1-0.1-0.2s0-0.1,0.1-0.2c0.1-0.1,0.1-0.1,0.2-0.1c0,0,0.1,0,0.2,0.1l2.8,2.8l6.5-6.5c0.1-0.1,0.1-0.1,0.2-0.1s0.1,0,0.2,0.1c0.1,0.1,0.1,0.1,0.1,0.2c0,0,0,0.1-0.1,0.2l-6.7,6.7C8.8,14.8,8.8,14.8,8.7,14.8z'></path><path class='st1' d='M15.4,6.6c-0.3,0-0.6,0.1-0.9,0.4l-5.8,5.8l-2.1-2.1c-0.2-0.2-0.6-0.4-0.9-0.4c-0.3,0-0.6,0.1-0.9,0.4c-0.5,0.5-0.5,1.3,0,1.8l2.9,2.9c0,0,0,0,0,0c0.2,0.2,0.6,0.4,0.9,0.4s0.6-0.1,0.9-0.4l6.7-6.7c0.5-0.5,0.5-1.3,0-1.8C16.1,6.7,15.7,6.6,15.4,6.6L15.4,6.6z'></path></g></svg>&nbsp; Your job alert email has been created.</p>"
+                                                                }
+
+                                                                    //DTM direct call for jaсreated condition
+                                                                    if (data.JaId > 0) {
+                                                                        window.digitalData["jobalert__id"] = data.JaId;
+                                                                        try {
+                                                                            _satellite.track("jacreated");
+                                                                        } catch (e) {}
+                                                                    }
+                                                                $("#jobalertfeedback-inline").html("");
+                                                                $("#jobalertfeedback-inline").html(message);
+                                                            } else {
+                                                                $("#jobalertfeedback-inline").html("");
+                                                                $("#jobalertfeedback-inline").html("<p class='error'><?xml version='1.0' encoding='utf-8'?><!-- Generator: Adobe Illustrator 20.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  --><svg version='1.1' id='Layer_1' xmlns='https://www.w3.org/2000/svg' xmlns:xlink='https://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 21 21' style='enable-background:new 0 0 21 21;width: 19px;vertical-align: bottom;' xml:space='preserve'><style type='text/css'>.st0{fill:none;}.stRed{fill:#FF9595;}</style><g><path class='st0' d='M10.5,20C5.3,20,1,15.7,1,10.5C1,5.3,5.3,1,10.5,1c5.2,0,9.5,4.2,9.5,9.5C20,15.7,15.7,20,10.5,20z'/><path class='stRed' d='M10.5,2c4.7,0,8.5,3.8,8.5,8.5S15.2,19,10.5,19S2,15.2,2,10.5S5.8,2,10.5,2 M10.5,0C4.7,0,0,4.7,0,10.5S4.7,21,10.5,21S21,16.3,21,10.5S16.3,0,10.5,0L10.5,0z'/></g><g><path class='stRed' d='M12.4,14.9C11.1,16.4,9.7,17,9.1,17c-0.5,0-0.9-0.4-0.6-1.9l1.1-4.8c0.1-0.5,0.1-0.6,0-0.6c-0.2,0-0.8,0.4-1.1,0.7L8.2,9.9c1.3-1.3,2.7-2.1,3.4-2.1c0.6,0,0.7,0.7,0.4,2l-1.1,4.7c-0.1,0.6-0.1,0.7,0.1,0.7c0.2,0,0.6-0.3,1.1-0.7L12.4,14.9z M12.8,5.1c0,0.8-0.6,1.5-1.4,1.5c-0.6,0-1-0.5-1-1.1c0-0.8,0.5-1.5,1.4-1.5C12.4,4,12.8,4.5,12.8,5.1z'/></g></svg>&nbsp; You have reached your limit of 5 job alert emails.<br>To save a new job alert email you must delete at least 1 previously <a href='/myprofile/jobalerts'>saved job alert</a>.</p>");
+                                                            }
+                                                            $("#jobalerterror-inline").css("display", "none");
+                                                        },
+                                                    });
+                                                } else {
+                                                        $("#ja-alert-error-email").css("display","block");
+                                                    }
+                                                } else {
+                                                   $("#ja-alert-error").css("display","block");
+                                                }
+                                            }
+
+                                        </script>
+                                        <div id="addjobalertinlinediv">
+                                            <h4><span>Email me jobs similar to:</span> Senior Python Backend Engineer
+                                                (JHB/CPT)</h4>
+                                            <div id="jobalertfeedback-inline" class="form-cell clearfix ">
+                                                <input class="name-alert" id="Email-inline" maxlength="255"
+                                                       name="Email-inline" placeholder="EMAIL" type="email" value="">
+                                                <input id="createjobalert-inline" type="button" value="CREATE ALERT"
+                                                       onclick="createJobAlertInline();" class="create-alert lo">
+                                                <div id="ja-alert-error" style="display:none">
+                                                    <p>Please enter your email address.</p>
+                                                </div>
+                                                <div id="ja-alert-error-email" style="display:none">
+                                                    <p>Please enter a valid email address.</p>
+                                                </div>
+                                                <div id="ja-alert-success" style="display:none">
+                                                    <p>Your job alert email has been created. An email has been sent to
+                                                        "email address" Please click the link in the email to create
+                                                        your account and start receiving your Job Alerts emails. The
+                                                        link will expire in 24 hours.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="daily-mail">
+                                <p>Receive a daily digest of all new jobs matching this job: <strong>Senior IT
+                                    Auditor</strong>. Your information is safe with us and you can cancel at any time.
+                                </p>
+                                <div class="mail-confirm">
+                                    <input type="text" placeholder="Personal Email Address"> <a href="#">Create
+                                    alert</a>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<span class="job-sharing-dropdown-mob"> <!-- The Modal -->
+  <div id="shareJobModal" class="modal">
+   <!-- Modal content -->
+   <div class="modal-content">
+    <h2>Share this job</h2><span class="close">×</span>
+    <ul class="modal-list">
+     <li><!-- AddThis Button BEGIN -->
+      <div class="addthis_toolbox addthis_default_style addthis_32x32_style">
+       <a name="whatsapp" href="#" onclick="OpenSocialMediaUrl(this);return false;" class="addthis_button_whatsapp"><i
+               class="fab fa-whatsapp"></i><span>Whatsapp</span></a> <a name="facebook" href="#"
+                                                                        onclick="OpenSocialMediaUrl(this);return false;"
+                                                                        class="addthis_button_facebook"><i
+              class="fab fa-facebook-f"></i><span>Facebook</span></a> <a name="twitter" href="#"
+                                                                         onclick="OpenSocialMediaUrl(this);return false;"
+                                                                         class="addthis_button_twitter"><i
+              class="fab fa-twitter"></i><span>Twitter</span></a>
+      </div>
+      <script type="text/javascript">var addthis_config = { "data_track_addressbar": false }; var addthis_share = { email_template: "CareerJunction_Addthis" };</script>
+         <!-- AddThis Button END -->
+      <script>
+    function OpenSocialMediaUrl(button) {
+
+        const w = 480, h = 350;
+
+        // Fixes dual-screen position                             Most browsers      Firefox
+        const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screenX;
+        const dualScreenTop = window.screenTop !== undefined ? window.screenTop : window.screenY;
+
+        const width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+        const height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+        const systemZoom = width / window.screen.availWidth;
+        const left = (width - w) / 2 / systemZoom + dualScreenLeft;
+        const top = (height - h) / 2 / systemZoom + dualScreenTop;
+
+
+        const url = window.location.href;
+        const platform = button.name;
+        let shareUrl;
+        switch (platform) {
+            case 'facebook':
+                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+                break;
+            case 'twitter':
+                shareUrl = `https://twitter.com/share?url=${encodeURIComponent(url)}`;
+                break;
+            case 'linkedin':
+                shareUrl = `https://www.linkedin.com/shareArticle?url=${encodeURIComponent(url)}`;
+                break;
+            case 'google':
+                shareUrl = `https://plus.google.com/share?url=${encodeURIComponent(url)}`;
+                break;
+            case 'whatsapp':
+                shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(url)}`;
+                break;
+        }
+
+        window.open(shareUrl, platform,
+            `
+                  scrollbars=yes,
+                  width=${w / systemZoom},
+                  height=${h / systemZoom},
+                  top=${top},
+                  left=${left}
+                `
+        );
+    }
+</script><span class="rep-job-cjun"> <a href="/report-this-job?id=2605328" rel="nofollow"><i
+                 class="fas fa-exclamation-circle"></i> <span>Report This Job</span></a> </span></li>
+    </ul>
+   </div>
+  </div></span>
+<div class="overlay" id="overlayContainer">
+    <div class="popup">
+        <a class="close" id="overlayClose">×</a>
+        <h2>Update profile</h2>
+        <p>Recruiters require your CV and profile for job applications and to search for suitable candidates.</p>
+        <p>It's been over a year. Please review your profile to ensure it's still up-to-date. You will have an
+            opportunity to also upload a new CV.</p>
+        <div class="overlay-button">
+            <a href="/myprofile/EditProfile" class="action action-soft-logon editProfile">Start</a>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/js/ipad-force-screen-size.js"></script>
+<script type="text/javascript" src="/Common/js/sam-force-screen-size.js?v=1"></script><!--After Final MDB files-->
+<script type="text/javascript" src="/Common/js/cjun/cjun-main-menu.js"></script>
+<script type="text/javascript" src="/Common/js/cjun/cjun-search-global.js"></script>
+<script type="text/javascript" src="/Common/js/cjun/cjun_loader.js"></script>
+<script type="text/javascript">try { _satellite.pageBottom(); } catch (e) { }</script>
+<img src="https://ev05vj35u0.execute-api.eu-west-1.amazonaws.com/Live/srs-record-action/4/view/f07ee96a-10a3-11f0-baf3-02ecce2d5745/00000000-0000-0000-0000-000000000000"
+     style="width: 1px;height: 1px;">
+<footer>
+    <div class="sections-container">
+        <div class="job-seekers">
+            <h2>Job Seekers</h2>
+            <ul>
+                <h3>Site</h3>
+                <li><a href="/">Home / Search Jobs</a></li>
+                <li><a href="/myprofile/saved-jobs">My Jobs</a></li>
+                <li><a href="/myprofile/jobalerts">My Alerts</a></li>
+                <li><a href="/myprofile/EditProfile">My Profile &amp; CV</a></li>
+            </ul>
+            <ul>
+                <h3>Assistance</h3>
+                <li><a href="/support">FAQ &amp; Support</a></li>
+            </ul>
+            <ul>
+                <h3>Account</h3>
+                <li><a href="/account/signin">Sign In</a> | <a class="singUpButton">Sign Up</a></li>
+            </ul>
+        </div>
+        <div class="agencies-and-employers">
+            <h2>Agencies &amp; Employers</h2>
+            <ul>
+                <h3>Site</h3>
+                <li><a href="//recruiter.careerjunction.co.za">Home / Find Talent</a></li>
+                <li><a href="//recruiter.careerjunction.co.za/assist?redirect_url=/">Recruit Assist</a></li>
+            </ul>
+            <ul>
+                <h3>Assistance</h3>
+                <li><a href="//recruiter.careerjunction.co.za/support?redirect_url=/">FAQ &amp; Support</a></li>
+            </ul>
+            <ul>
+                <h3>Account</h3>
+                <li><a href="//recruiter.careerjunction.co.za/#postajob">Sign Up |</a><a
+                        href="//recruiter.careerjunction.co.za/#postajob"> Sign In</a></li>
+                <li><a href="//recruiter.careerjunction.co.za/sales?redirect_url=/">Sales Enquiry</a></li>
+            </ul>
+        </div>
+        <div class="career-junction">
+            <h2>CareerJunction</h2>
+            <ul>
+                <h3>Info</h3>
+                <li><a href="/about">About Us / Contact Us</a></li>
+                <li><a href="/companies/30864/careerjunction">Work for Us</a></li>
+                <li><a href="/sistersites">Sister Sites</a></li>
+                <li><a href="/partners">Our Partners</a></li>
+                <li><a href="https://www.careerjunction.co.za/blog/">CareerJunction Blog</a></li>
+                <li><a href="/howcjworks">How It Works</a></li>
+            </ul>
+            <div class="app-icons">
+                <a href="https://app.adjust.com/aowasp"><img src="/images/cjun/app-store-button.svg" alt=""></a> <a
+                    href="https://app.adjust.com/wqm8d2"><img src="/images/cjun/googe-play-button.svg" alt=""
+                                                              class="google-play-i"></a>
+            </div>
+        </div>
+    </div>
+    <div class="terms-container">
+        <div class="terms">
+            <div class="links">
+                <p>© <span id="current_year"></span> Copyright: www.careerjunction.co.za</p>
+                <p><a href="https://cj-marketing.s3.eu-west-1.amazonaws.com/PAIA-Manual+January+260122.pdf"
+                      target="_blank">PAIA</a>,<a href="/privacy" target="_blank">Privacy</a>, <a
+                        href="/about/cookie-policy" target="_blank">Cookies</a> &amp; <a href="/about/terms"
+                                                                                         target="_blank">Terms</a></p>
+            </div>
+            <div class="icons">
+                <a href="https://www.careerjunction.co.za/blog/">
+                    <div class="icon-circle">
+                        <i class="fab fa-wordpress"></i>
+                    </div>
+                </a> <a href="https://www.facebook.com/CareerJunction" rel="nofollow">
+                <div class="icon-circle">
+                    <i class="fab fa-facebook-f"></i>
+                </div>
+            </a> <a href="https://www.linkedin.com/company/careerjunction" rel="nofollow">
+                <div class="icon-circle">
+                    <i class="fab fa-linkedin-in"></i>
+                </div>
+            </a> <a href="https://twitter.com/Career_Junction" rel="nofollow">
+                <div class="icon-circle">
+                    <i class="fab fa-twitter"></i>
+                </div>
+            </a> <a href="https://www.youtube.com/user/careerjunction?feature=results_main" rel="nofollow">
+                <div class="icon-circle">
+                    <i class="fab fa-youtube"></i>
+                </div>
+            </a>
+            </div>
+        </div>
+    </div>
+</footer>
+<script>
+    window.onload = function () {
+        var currentYearLabel = this.document.getElementById("current_year")
+        var currentYear = new Date().getFullYear()
+        currentYearLabel.innerHTML = currentYear
+    }
+</script>
+<script type="text/javascript" src="/Common/js/cjun/cjun_logo_joboffer.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".job-desc-on-expired").show();
+        $("#addjobalertdivSimilar").hide();
+
+        $("#create-job-alert-btn").unbind("click");
+
+        $('#create-job-alert-btn').on('click', function (event) {
+            event.stopPropagation();
+
+            $('#addjobalertdivSimilar').slideToggle('fast');
+            $('.email-me-jobs-btn').toggleClass('open');
+            $('#Email-similar').focus();
+        });
+    })
+</script>
+<script type="text/javascript" src="/Common/js/cjun/cjun-overlay-update-profile.js?v=1.1"></script>
+<script type="text/javascript" src="/Common/js/cjun/cjun-maskedLocationAndCategoryDrp.js"></script>
+<div class="loader-overall">
+    <img src="/images/cjun/loader.gif" class="loader-img">
+</div><!--Begin Comm100 Live Chat Code-->
+<div class="comm100-button" id="comm100-button-2670"></div>
+<script type="text/javascript">
+    var Comm100API=Comm100API||{};(function(t){function e(e){var a=document.createElement("script"),c=document.getElementsByTagName("script")[0];a.type="text/javascript",a.async=!0,a.src=e+t.site_id,c.parentNode.insertBefore(a,c)}t.chat_buttons=t.chat_buttons||[],t.chat_buttons.push({code_plan:2670,div_id:"comm100-button-2670"}),t.site_id=119929,t.main_code_plan=2670,e("https://vue.comm100.com/livechat.ashx?siteId="),setTimeout(function(){t.loaded||e("https://standby.comm100vue.com/livechat.ashx?siteId=")},5e3)})(Comm100API||{})
+</script><!--End Comm100 Live Chat Code-->
+<script type="text/javascript" src="/HwsGbH/eXFe8/EZ8vp/uQ/m77OXb4NQprk/SnYEAg/dz/h9AAMUIzU"></script>
+
+
+</body>
+</html>
